@@ -42,16 +42,16 @@ CREATE TABLE cities (
 CREATE TABLE clients (
     phone TEXT PRIMARY KEY CHECK (phone ~ '^[0-9]{9}$'),
     name TEXT NOT NULL,
-    city_id INTEGER NOT NULL,
+    city_id INTEGER NOT NULL REFERENCES cities,
     birth_date DATE
 );
 
 -- Таблица заказов (без внешних ключей, но со статусом)
 CREATE TABLE orders (
     id SERIAL PRIMARY KEY,
-    client_phone TEXT NOT NULL,
-    flower_id INTEGER NOT NULL,
-    color_code CHAR(2) NOT NULL,
+    client_phone TEXT NOT NULL REFERENCES clients,
+    flower_id INTEGER NOT NULL REFERENCES flowers,
+    color_code CHAR(2) NOT NULL REFERENCES colors,
     quantity INTEGER NOT NULL CHECK (quantity > 0),
     order_ts TIMESTAMP NOT NULL,
     status TEXT NOT NULL DEFAULT 'новый' CHECK (status IN ('новый', 'в доставке', 'доставлен', 'отменён'))
